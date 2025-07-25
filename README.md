@@ -40,7 +40,7 @@ msg := synapse.AgentMessage{
     Receiver:  "agent.calendar",
     Type:      "question",
     Content:   "Vai chover durante as minhas reuniões?",
-    ReplyTo:   "gomind.responses",
+    ReplyTo:   "mcp.responses",
     ContextID: "session-abc",
 }
 
@@ -58,7 +58,7 @@ client.Publish("agents.request", msg)
   "sender": "agent.weather",
   "receiver": "agent.calendar",
   "content": "What is the weather today?",
-  "reply_to": "gomind.responses",
+  "reply_to": "mcp.responses",
   "context_id": "session-abc",
   "stream": true,
   "metadata": {
