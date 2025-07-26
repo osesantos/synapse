@@ -39,7 +39,7 @@ msg := synapse.AgentMessage{
     Sender:    "agent.weather",
     Receiver:  "agent.calendar",
     Type:      "question",
-    Content:   "Vai chover durante as minhas reuniões?",
+    Content:   "What is the weather today?",
     ReplyTo:   "mcp.responses",
     ContextID: "session-abc",
 }
