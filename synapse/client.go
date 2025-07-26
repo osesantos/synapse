@@ -51,3 +51,10 @@ func (s *SynapseClient) Subscribe(subject string, handler SynapseMessageHandler)
 		return nil
 	})
 }
+
+func (s *SynapseClient) Close() error {
+	if s.conn == nil {
+		return transport.ErrNatsConnectionNotEstablished
+	}
+	return s.conn.Close()
+}

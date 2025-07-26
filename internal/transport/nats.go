@@ -42,3 +42,11 @@ func (t *NatsClient) Subscribe(subject string, handler MsgHandler) (*nats.Subscr
 		}
 	})
 }
+
+func (t *NatsClient) Close() error {
+	if t.conn == nil {
+		return ErrNatsConnectionNotEstablished
+	}
+	t.conn.Close()
+	return nil
+}
