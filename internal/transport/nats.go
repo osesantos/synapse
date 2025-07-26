@@ -11,13 +11,15 @@ type NatsClient struct {
 	conn *nats.Conn
 }
 
+var _ Client = (*NatsClient)(nil)
+
 type Subscription = nats.Subscription
 type Msg = nats.Msg
-type MsgHandler func(msg *Msg) error
+type MsgHandler = func(msg *Msg) error
 
 var ErrNatsConnectionNotEstablished = errors.New("Nats connection is not established")
 
-func NewNatsClient(natsURL string) (*NatsClient, error) {
+func NewClient(natsURL string) (*NatsClient, error) {
 	natsClient, err := nats.Connect(natsURL)
 	if err != nil {
 		return nil, err
@@ -25,11 +27,11 @@ func NewNatsClient(natsURL string) (*NatsClient, error) {
 	return &NatsClient{conn: natsClient}, nil
 }
 
-func (t *NatsClient) Publish(subject string, msg []byte) error {
+func (t *NatsClient) Publish(subject string, data []byte) error {
 	if t.conn == nil {
 		return fmt.Errorf("Nats connection is not established")
 	}
-	return t.conn.Publish(subject, msg)
+	return t.conn.Publish(subject, data)
 }
 
 func (t *NatsClient) Subscribe(subject string, handler MsgHandler) (*nats.Subscription, error) {

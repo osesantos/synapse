@@ -4,15 +4,38 @@ import (
 	"testing"
 	"time"
 
+	"github.com/osesantos/synapse/internal/transport"
 	"github.com/osesantos/synapse/synapse"
 )
 
+type MockClient struct {
+	publishCalled  bool
+	publishSubject string
+	publishData    []byte
+}
+
+func (m *MockClient) Publish(subject string, data []byte) error {
+	m.publishCalled = true
+	m.publishSubject = subject
+	m.publishData = data
+	return nil
+}
+
+func (m *MockClient) Subscribe(subject string, handler func(msg *transport.Msg)) (*transport.Subscription, error) {
+	return nil, nil
+}
+
+func (m *MockClient) Close() error {
+	return nil
+}
+
+func NewMockClient() *MockClient {
+	return &MockClient{}
+}
+
 func TestSynapseClient(t *testing.T) {
-	natsURL := "nats://localhost:4222"
-	client, err := synapse.NewSynapseClient(natsURL)
-	if err != nil {
-		t.Fatalf("Failed to create Synapse client: %v", err)
-	}
+	server := NewMockClient()
+	client := synapse.NewSynapseClientWithConn(server)
 	defer client.Close()
 
 	subject := "test.subject"

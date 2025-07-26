@@ -13,11 +13,15 @@ type SynapseClient struct {
 type SynapseMessageHandler func(msg AgentMessage) error
 
 func NewSynapseClient(natsURL string) (*SynapseClient, error) {
-	natsClient, err := transport.NewNatsClient(natsURL)
+	natsClient, err := transport.NewClient(natsURL)
 	if err != nil {
 		return nil, err
 	}
-	return &SynapseClient{conn: natsClient}, nil
+	return NewSynapseClientWithConn(natsClient), nil
+}
+
+func NewSynapseClientWithConn(conn *transport.Client) *SynapseClient {
+	return &SynapseClient{conn: conn}
 }
 
 func (s *SynapseClient) Publish(subject string, msg AgentMessage) error {
